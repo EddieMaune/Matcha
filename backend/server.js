@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const todoRoutes = express.Router();
+const Todo = require('./todo.model.js');
 
 const PORT = 4000;
 
-mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
+mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true , useUnifiedTopology: true});
 const connection = mongoose.connection;
 
 connection.once('open', function() {
