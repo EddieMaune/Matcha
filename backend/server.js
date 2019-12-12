@@ -2,13 +2,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const todoRoutes = express.Router();
-const Todo = require('./todo.model.js');
-const mongodb = require('mongodb');
-const MongoClient = require('mongodb').MongoClient
+// const Todo = require('./todo.model.js');
+const db = require('./connection');
+const users = require("./routes/api/users");
 const PORT = 4000;
-var db = null;
 
 
 // mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true , useUnifiedTopology: true});
@@ -18,29 +17,27 @@ var db = null;
 //     console.log("MongoDB database connection established successfully");
 // });
 
-MongoClient.connect("mongodb://localhost:27017/todos", function(err, client) {
-  if(err) return console.error(err);
 
-  db = client.db('todos');
-//   console.log(db);
-
-  // the Mongo driver recommends starting the server here because most apps *should* fail to start if they have no DB.  If yours is the exception, move the server startup elsewhere. 
-});
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/todos', todoRoutes);
 
+// console.log(users);
+ app.use("/api/users", users);
 
 todoRoutes.route('/').get(function(req, res, next) {
     ///console.log(db.collection('todos').find({}));
+
+    
+
    
     db.collection('todos').find({}, function(err, docs) {
     //   if(err) 
     //     return next(err);
        docs.each(function(err, doc) {
         if(doc) {
-          console.log(doc);
+          // console.log(doc);
         }
         else {
           res.end();
