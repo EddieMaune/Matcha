@@ -13,7 +13,6 @@ MongoClient.connect("mongodb://localhost:27017/matcha", { useUnifiedTopology: tr
   if(err) return console.error(err);
 
   db = client.db('matcha');
-/
   // the Mongo driver recommends starting the server here because most apps *should* fail to start if they have no DB.  If yours is the exception, move the server startup elsewhere. 
 });
 
@@ -51,7 +50,7 @@ router.post("/register", (req, res) => {
                             throw err;
                         if (r.insertedCount != 1)
                             console.log("ERROR: Failed to insert into database.");
-                        console.log(r);
+                        res.json(newUser);
                     });
                 });
 
