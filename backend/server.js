@@ -1,3 +1,5 @@
+const mongodb = require('mongodb');
+const MongoClient = require('mongodb').MongoClient
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -5,7 +7,7 @@ const cors = require('cors');
 // const mongoose = require('mongoose');
 const todoRoutes = express.Router();
 // const Todo = require('./todo.model.js');
-const db = require('./connection');
+let db = null;//require('./connection');
 const users = require("./routes/api/users");
 const PORT = 4000;
 
@@ -16,8 +18,16 @@ const PORT = 4000;
 // connection.once('open', function() {
 //     console.log("MongoDB database connection established successfully");
 // });
+MongoClient.connect("mongodb://localhost:27017/matcha", { useUnifiedTopology: true }, function(err, client) {
+  if(err) return console.error(err);
 
+  db = client.db('matcha');
+//   console.log(database);
+  
+//   console.log(db);
 
+  // the Mongo driver recommends starting the server here because most apps *should* fail to start if they have no DB.  If yours is the exception, move the server startup elsewhere. 
+});
 
 app.use(cors());
 app.use(bodyParser.json());

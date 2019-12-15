@@ -1,19 +1,21 @@
 const mongodb = require('mongodb');
 const MongoClient = require('mongodb').MongoClient
-const db = require('../../connection');
+let db = null;//require('../../connection');
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-
-// const keys = require("../../config/keys");
-// Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
-// Load User model
-// const User = require("../../models/User");
 
+
+MongoClient.connect("mongodb://localhost:27017/matcha", { useUnifiedTopology: true }, function(err, client) {
+  if(err) return console.error(err);
+
+  db = client.db('matcha');
+/
+  // the Mongo driver recommends starting the server here because most apps *should* fail to start if they have no DB.  If yours is the exception, move the server startup elsewhere. 
+});
 
 // @route POST api/users/register
 // @desc Register user
@@ -25,9 +27,6 @@ router.post("/register", (req, res) => {
     if (!isValid) {
         return res.status(400).json(errors);
     } else {
-
-
-        console.log(db);
         db.collection("users").findOne({ email: req.body.email }, function (err, user) {
             if (err)
                 throw err;
@@ -36,9 +35,10 @@ router.post("/register", (req, res) => {
             }
 
             const newUser = {
-                name: req.body.name,
+                 name: req.body.name,
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                date: Date.now().toString()
             };
 
             bcrypt.genSalt(10, (err, salt) => {
@@ -51,10 +51,7 @@ router.post("/register", (req, res) => {
                             throw err;
                         if (r.insertedCount != 1)
                             console.log("ERROR: Failed to insert into database.");
-                        //   newUser
-                        //     .save()
-                        //     .then(user => res.json(user))
-                        //     .catch(err => console.log(err));
+                        console.log(r);
                     });
                 });
 
