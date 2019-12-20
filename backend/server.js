@@ -1,5 +1,7 @@
 const mongodb = require('mongodb');
-const MongoClient = require('mongodb').MongoClient
+const MongoClient = require('mongodb').MongoClient;
+const passport = require("passport");
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -32,8 +34,11 @@ MongoClient.connect("mongodb://localhost:27017/matcha", { useUnifiedTopology: tr
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/todos', todoRoutes);
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
 
-// console.log(users);
  app.use("/api/users", users);
 
 todoRoutes.route('/').get(function(req, res, next) {
