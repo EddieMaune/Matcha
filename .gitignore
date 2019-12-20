@@ -17,8 +17,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
-backend/data/db/journal/WiredTigerLog.0000000006
-backend/data/db/diagnostic.data/
+/backend/data/db/journal/
+/backend/data/db/diagnostic.data/
+/backend/data/db/diagnostic.data/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
